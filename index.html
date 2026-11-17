@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080b0d"><title>Search Bar Animation</title><link rel="stylesheet" href="app.css"></head>
+<body>
+<main class="page">
+  <header class="title"><h1>Search Bar</h1><h2>Animation</h2></header>
+  <section class="demo-stage" aria-label="Animated search bar demo">
+    <div class="search-seat" id="searchSeat" data-state="closed">
+      <span class="search-shadow"></span>
+      <div class="search-field">
+        <span class="search-sheen"></span>
+        <input class="search-input" id="searchInput" type="search" placeholder="Search something..." autocomplete="off" aria-label="Search something">
+      </div>
+      <button class="search-btn" id="searchBtn" type="button" aria-label="Open search" title="Search">
+        <svg class="icon-search" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"></circle><path d="m15.5 15.5 4.3 4.3"></path></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+    <p class="search-hint" id="searchHint" aria-live="polite"></p>
+  </section>
+  <div class="credit"><span>●</span> @_code_and_chill_</div>
+  <section class="source-grid" aria-label="Readable code from the video">
+    <article class="source-card html-card"><div class="source-head"><i></i>index.html</div><pre><code><span class="comment">&lt;!-- the seat is the OPEN pill's box
+     at all times, so nothing on the
+     page reflows when it opens --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"scry__seat"</span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- cast on the page, not stuck
+       to the panel: it never turns,
+       it only arrives --&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"scry__shadow"</span><span class="tag">&gt;&lt;/span&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"scry__field"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"scry__sheen"</span><span class="tag">&gt;&lt;/span&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">class</span>=<span class="str">"scry__input"</span>
+      <span class="attr">type</span>=<span class="str">"search"</span>
+      <span class="attr">placeholder</span>=<span class="str">"Search something..."</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="comment">&lt;!-- ships as a SUBMIT; the script
+       downgrades it to a toggle, so
+       no-JS still searches --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"scry__btn"</span>
+    <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>⌕<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre></article>
+    <article class="source-card css-card"><div class="source-head"><i></i>app.css</div><pre><code><span class="comment">/* fitted to the reference over 19
+   frames — max error .007 of the
+   travel. easeInOutQuad misses by
+   .071, Material's by .275 */</span>
+<span class="selector">--ease-open</span>: <span class="fn">cubic-bezier</span>(
+  <span class="num">.55, .08, .4, .95</span>);
+
+<span class="comment">/* read off the WIDTH: at 5:1 a
+   picked perspective fans the far
+   end of the pill */</span>
+<span class="selector">.scry__seat</span> { <span class="prop">perspective</span>:
+  <span class="fn">calc</span>(<span class="var">var(--w)</span> * <span class="num">2.2</span>); }
+
+<span class="comment">/* the panel is hinged on its own
+   long centre line — the line the
+   icon already sits on */</span>
+<span class="selector">.scry__field</span> {
+  <span class="prop">transform-origin</span>: <span class="num">50% 50%</span>;
+  <span class="prop">transition</span>: <span class="num">transform .633s</span>
+    <span class="var">var(--ease-open)</span>;
+}
+<span class="selector">[data-state="closed"] .scry__field</span> {
+  <span class="prop">transform</span>: <span class="fn">rotateX</span>(<span class="num">-90deg</span>);
+}</code></pre></article>
+    <article class="source-card js-card"><div class="source-head"><i></i>app.js</div><pre><code><span class="comment">// one button, three jobs, in this
+// order — a control that opens,
+// clears and closes under ONE label
+// is three controls in a trench coat</span>
+btn.addEventListener(<span class="str">'click'</span>, () =&gt; {
+  <span class="kw">if</span> (!isOpen()) { open(); <span class="kw">return</span>; }
+  <span class="kw">if</span> (hasText()) { clear(); <span class="kw">return</span>; }
+  close({ focus: <span class="kw">true</span> });
+});
+
+<span class="kw">const</span> name = () =&gt;
+  !isOpen() ? <span class="str">'Search'</span>
+  : hasText() ? <span class="str">'Clear search'</span>
+  : <span class="str">'Close search'</span>;
+
+<span class="comment">// :focus-visible ALWAYS matches a
+// focused text field, so a ring
+// gated on it shows for every mouse
+// user. Track the modality by hand.</span>
+addEventListener(<span class="str">'keydown'</span>, (e) =&gt; {
+  <span class="kw">if</span> (KEYS.has(e.key)) kbd = <span class="kw">true</span>;
+}, <span class="kw">true</span>);</code></pre></article>
+  </section>
+  <footer>One button · Three jobs · One satisfying search animation</footer>
+</main>
+<script src="app.js"></script></body></html>
